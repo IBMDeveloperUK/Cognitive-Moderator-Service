@@ -87,7 +87,7 @@ def main(event):
             print('Image displays explicit content- deleting from Slack Shared Files...')
             delete_image(event, file_id)
             print('Posting message to channel to notify users of file deletion...')
-            post_message(event, channel, "File removed due to contain explicit content")
+            post_message(event, channel, "File removed due to containing explicit content")
             
         return {"payload": "Done"}
         
