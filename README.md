@@ -33,7 +33,6 @@ When the reader has completed this journey, they will understand how to:
 
 [![](https://img.youtube.com/vi/9c7NuamK8JA/0.jpg)](https://youtu.be/9c7NuamK8JA)
 
-
 # Steps
 
 1. [Clone the repo](#1-clone-the-repo)
@@ -42,29 +41,36 @@ When the reader has completed this journey, they will understand how to:
 4. [Deploy the function to IBM Cloud](#4-deploy-the-function-to-ibm-cloud)
 5. [Test using slack](#5-test-using-slack)
 
+## Pre-requisites
+
+To go through this workshop smoothly, you'll need the following:
+- an IBM Cloud account
+- [GIT CLI](https://git-scm.com/downloads) installed on your machine
+- [IBM Cloud CLI](https://github.com/IBM-Cloud/ibm-cloud-cli-release/releases/) installed on your machine
+
 
 ## 1. Clone the repo
 
-Clone the `cognitive-moderator-service` repo locally. In a terminal, run:
+Clone the `cognitive-moderator-service` repository locally. In a terminal (we recommend using PowerShell on Windows), run:
 
 ```
-$ git clone https://github.com/IBM/cognitive-moderator-service
+$ git clone https://github.com/IBMDeveloperUK/cognitive-moderator-service.git
 $ cd cognitive-moderator-service
 ```
 
-## 2. Create Watson Visual Recognition and natural language understanding service with IBM Cloud
+## 2. Create Watson Visual Recognition and Natural Language Understanding service on IBM Cloud
 
-If you do not already have a IBM Cloud account, [sign up for IBM Cloud](https://cloud.ibm.com/registration).
-Create the following services:
+Create the following services, you can leave all the values to default:
 
 * [**Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition)
 * [**Watson Natural Language Understanding**](https://cloud.ibm.com/catalog/services/natural-language-understanding)
 
-> Make note of the service credentials when creating services which will be later used when creating a function.
+> Make note of the service credentials - you can access them by clicking `Service Credentials` on the left hand side panel once the service is created - as they will be later used when creating a function.
 
 ## 3. Create Slack App and Bot for a workspace
 
-* Go to Your Apps using the following link: https://api.slack.com/apps and click `Create New App` and fill out the `App Name` and the `Workspace` you would like to use it for and click `Create App`.
+* Create [your own Slack workspace here](https://slack.com/create) 
+* Once created, access [Your Apps](https://api.slack.com/apps), click `Create New App`. Fill out the `App Name` and the `Workspace` fields and click `Create App`.
 
 ![](doc/source/images/create-new-app.png)
 
@@ -74,22 +80,19 @@ Create the following services:
 * Create bot user from `Bot Users`. Provide a `Display Name` and `Default Username` for the bot and click `Save Changes`.
 ![](doc/source/images/bot-users.png)
 
-* From `OAuth and Permissions`, Save the `OAuth Access Token` for later use by the IBM cloud function.
+* From `OAuth and Permissions`, save the `OAuth Access Token` for later use by the IBM cloud function.
 ![](doc/source/images/oauth-access-token.png)
 
 Select `Permissions Scopes` that will be used by the bot that we will be creating next.
 
 ![](doc/source/images/permission-scopes.png)
 
-* Once this is done make sure you `reinstall or install app` from Install App section.
-![](doc/source/images/reinstall-app.png)
+* Once this is done, click Save and `reinstall the app` as prompted at the top of the page. 
 
 ## 4. Deploy the function to IBM Cloud
 Once the credentials for both IBM Cloud and Slack are noted, we can now deploy the function to IBM Cloud.
 
-Copy `params.sample.json` to `params.json` using `cp params.sample.json params.json` and replace the values with the credentials you have noted in proper place holders. Get a `VISUAL_RECOGNITION_IAM_APIKEY` [here](https://cloud.ibm.com/openwhisk/learn/api-key).
-
-> NOTE: `NLU_URL` is optional. You can also remove the `NLU_URL` key/value from the below json and it uses the global URL part of the SDK.
+Copy `params.sample.json` to `params.json` using `cp params.sample.json params.json` and replace the values with the credentials you have noted in proper place holders.
 
 ```
 {
@@ -107,21 +110,29 @@ Copy `params.sample.json` to `params.json` using `cp params.sample.json params.j
 
 ```
 
-Install the [IBM cloud CLI)(https://cloud.ibm.com/docs/cli/index.html#overview) if you haven't already, including the [IBM Cloud Functions CLI plugin](https://cloud.ibm.com/openwhisk/learn/cli).
+To deploy the function you'll need to install the Cloud Functions plugin, you can do so by running the following command in your terminal:
+```
+ibmcloud plugin install cloud-functions
+```
 
-* Deploy the function to IBM cloud. Make sure you are in the project directory then, from Terminal run:
+Once this is done, run the following commands in your terminal:
+
+* Login to IBM Cloud
+```
+ibmcloud login
+```
+
+* Target the right `Org` and `Space`
+```
+ibmcloud target --cf
+```
+
+* Deploy the function to IBM cloud. Make sure you are in the project directory then run:
 
 ```
 ibmcloud wsk action create WatsonModerator functions/bot_moderator_function.py --param-file params.json --kind python:3.7 --web true
 
 ```
->Note: The above command pushes the function with python 3.7 runtime and the function is written to suit the runtime. 
-
->If you want to use python 3.6, comment out or remove the below code:
-
-> `response = response.get_result()` (line 122) from the function and then run
-
-> `ibmcloud wsk action create WatsonModerator functions/bot_moderator_function.py --param-file params.json --kind python:3.6 --web true`
 
 * After the function is created, you can run following command to update the function if there are any changes:
 
@@ -129,13 +140,13 @@ ibmcloud wsk action create WatsonModerator functions/bot_moderator_function.py -
 ibmcloud wsk action update WatsonModerator functions/bot_moderator_function.py --param-file params.json --kind python:3.7
 ```
 
-Now you can login to IBM Cloud and see the function by going to `IBM functions`, click `Actions`. You should see the function in the list of functions in this page.
+Now you can login to IBM Cloud and see the function by going to `IBM functions` in the left side-panel (if it doesn't show you can click the hamberger button at the top-left), click `Actions`. You should see the function in the list of functions in this page.
 ![](doc/source/images/ibm-cloud-functions.png)
 
 
 * Expose the function so that it can be accessed using an API
 
-1. Click the `APIs` from the IBM Cloud Functions page and click  `Create Managed API`.
+1. Click the `APIs` from the IBM Cloud Functions page and click  `Create Cloud Functions API`.
 ![](doc/source/images/create-api.png)
 
 2. Provide `API Name`, `Base path for API`
@@ -146,6 +157,8 @@ Now you can login to IBM Cloud and see the function by going to `IBM functions`,
 
 4. From the `API Explorer` select the `API URL` and save it for later use.
 ![](doc/source/images/create-api-3.png)
+
+* Now, go back to your [Slack administration page](https://api.slack.com/apps/)
 
 * Add `Event Subscriptions` for your app by clicking on to `Add features and functionality` from the main page of the app.
 ![](doc/source/images/event-subscriptions.png)
@@ -164,7 +177,7 @@ In the `Event Subscriptions` page, enable it by turning `on` using the `on/off` 
 
 ![](doc/source/images/events.png)
 
-> Note that you need to `Reinstall App` after you make any changes to the app for example: `Request URL`.
+* Click Save Changes and reinstall the app as prompted at the top of the page.
 
 ## 5. Test using slack
 
