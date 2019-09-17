@@ -44,7 +44,7 @@ When the reader has completed this journey, they will understand how to:
 ## Pre-requisites
 
 To go through this workshop smoothly, you'll need the following:
-- an IBM Cloud account
+- an [IBM Cloud account](https://ibm.biz/Bdzfzm)
 - [GIT CLI](https://git-scm.com/downloads) installed on your machine
 - [IBM Cloud CLI](https://github.com/IBM-Cloud/ibm-cloud-cli-release/releases/) installed on your machine
 
