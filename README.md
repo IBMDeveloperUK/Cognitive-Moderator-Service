@@ -33,20 +33,20 @@ When the reader has completed this journey, they will understand how to:
 
 [![](https://img.youtube.com/vi/9c7NuamK8JA/0.jpg)](https://youtu.be/9c7NuamK8JA)
 
-# Steps
+# Pre-requisites
+
+To go through this workshop smoothly, you'll need the following:
+- an [IBM Cloud account](https://ibm.biz/Bdzfzg)
+- [GIT CLI](https://git-scm.com/downloads) installed on your machine
+- [IBM Cloud CLI](https://github.com/IBM-Cloud/ibm-cloud-cli-release/releases/) installed on your machine
+
+## Steps
 
 1. [Clone the repo](#1-clone-the-repo)
 2. [Create Watson Visual Recognition and Natural Language Understanding service with IBM Cloud](#2-create-watson-visual-recognition-and-natural-language-understanding-service-with-ibm-cloud)
 3. [Create Slack App and Bot for a workspace](#3-create-slack-app-and-bot-for-a-workspace)
 4. [Deploy the function to IBM Cloud](#4-deploy-the-function-to-ibm-cloud)
 5. [Test using slack](#5-test-using-slack)
-
-## Pre-requisites
-
-To go through this workshop smoothly, you'll need the following:
-- an [IBM Cloud account](https://ibm.biz/Bdzfzm)
-- [GIT CLI](https://git-scm.com/downloads) installed on your machine
-- [IBM Cloud CLI](https://github.com/IBM-Cloud/ibm-cloud-cli-release/releases/) installed on your machine
 
 
 ## 1. Clone the repo
